@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.navbar-brand {
+    color: #db4800 !important;
+}
+.nav-item .nav-link{
+    color: #000000;
+}
+.nav-item .nav-link .active{
+    background-color:  #db4800 !important;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+}
+.nav-link:hover{
+    background-color:  #db4800;
+    color: #FFFFFF;
+}
+.nav-link:active{
+    background-color:  #db4800 !important;
+    color: #FFFFFF;
+}
+.form-control{
+    border: none;
+    outline: none;
+}
+.notes-title{
+    font-weight: bold;
+}
+.form-control:focus{
+    box-shadow: inset 0 -1px 0 #ddd;
+}
+.card-link{
+    font-weight: bold;
+    font-size: 25px;
+
+}
+.edit{
+    padding-top: 10px;
+}
+.notes-card{
+    height: 300px;
+}
+.delete{
+    height: 25px;
+    font-size: 10px;
+}
+.footer{
+    vertical-align: bottom;
+}
