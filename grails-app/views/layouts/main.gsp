@@ -8,27 +8,38 @@
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <asset:stylesheet src="application.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+%{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" integrity="sha512-SgaqKKxJDQ/tAUAAXzvxZz33rmn7leYDYfBP+YoMRSENhf3zJyx3SBASt/OfeQwBHA1nxMis7mM3EV/oYT6Fdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />--}%
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <g:layoutHead/>
 </head>
 <body>
-    <div class="navbar navbar-default navbar-static-top" role="navigation">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/#">
-                    <i class="fa grails-icon">
-                        <asset:image src="grails-cupsonly-logo-white.svg"/>
-                    </i> Grails
-                </a>
-            </div>
-            <div class="navbar-collapse collapse" aria-expanded="false" style="height: 0.8px;">
-                <ul class="nav navbar-nav navbar-right">
-                    <g:pageProperty name="page.nav" />
+            <a class="navbar-brand font-weight-bold " href="${createLink(uri: '/')}"> <h2 class="font-weight-bold">EMS</h2> </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="${createLink(uri: '/')}" ><i class="fa-solid fa-house-chimney"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <g:link  class="nav-link"  controller="department" action="create"><i class="fa-solid fa-square-plus"></i> Create Department</g:link>
+                    </li>
+                    <li class="nav-item">
+                        <g:link class="nav-link" controller="department" action="index"><i class="fa-solid fa-table-list"></i> List Department</g:link>
+                    </li>
+                    <li class="nav-item">
+                        <g:link class="nav-link" controller="employee" action="create"><i class="fa-solid fa-square-plus"></i> Create Employee</g:link>
+                    </li>
+                    <li class="nav-item">
+                        <g:link class="nav-link" controller="employee" action="index"><i class="fa-solid fa-table-list"></i> List Employee</g:link>
+                    </li>
                 </ul>
             </div>
         </div>
-    </div>
-
+    </nav>
     <g:layoutBody/>
 
     <div class="footer" role="contentinfo"></div>

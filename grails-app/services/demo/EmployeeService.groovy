@@ -20,17 +20,13 @@ class EmployeeService {
     def updateEmployee(params) {
 //        println("employee: "+employee)
         try {
-            def employee = getEmployee(params.id)
-            def department = Department.findById(params.department_id)
-            println("employee: "+ employee)
-            println("department: "+ department)
+            def employee = getEmployee(Integer.parseInt(params.id))
+            def department = Department.findById(Integer.parseInt(params.department_id))
             if(employee != null){
                 employee.name = params.name
-                employee.age = params.age
+                employee.age = Integer.parseInt(params.age)
                 employee.position = params.position
                 employee.department =  department
-//                def result = employee.save()
-                println("UPTemployee: "+ employee)
                 return employee.save(flush:true)
             }else {
                 return null
@@ -75,12 +71,11 @@ class EmployeeService {
 //        }
 //    }
 //
-    def getEmployees() {
-        Employee.list()
+    def getEmployees(params) {
+        Employee.list(params)
     }
     def list() {
-        def employeeList = Employee.list()
-        return employeeList
+        return Employee.findAll()
     }
     def count() {
         def employeeCount = Employee.count()

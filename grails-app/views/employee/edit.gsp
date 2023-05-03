@@ -46,14 +46,10 @@
                             <td>Position: </td>
                             <td><g:textField name="position" value="${employee.position}" autocomplete="off" required="true"/></td>
                         </tr>
-%{--                        <tr>--}%
-%{--                            <td>Department Name: </td>--}%
-%{--                            <td> <g:select name="department_id" from="${employee.department.name}" optionKey="id" optionValue="name"></g:select></td>--}%
-%{--                        </tr>--}%
                         <tr>
                             <td>Department:* </td>
                             <td>
-                                <g:select value="department_id" name="department_id" from="${departmentList}" optionKey="id" optionValue="name"></g:select>
+                                <g:select value="${employee.department.id}" name="department_id" from="${departmentList}" optionKey="id" optionValue="name"></g:select>
                             </td>
                         </tr>
                     </table>

@@ -55,11 +55,14 @@ class DepartmentController {
 
     @Transactional
     def delete(Department department) {
+        if (department.hasErrors()) {
+            respond department.errors, view:'create'
+            return
+        }
         if (department == null) {
             notFound()
             return
         }
-
         department.delete flush:true
         flash.message = message(code: 'default.deleted.message', args: [message(code: 'department.label', default: 'Department'), department.id])
         redirect action:"index", method:"GET"

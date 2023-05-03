@@ -12,7 +12,7 @@ class EmployeeController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        render view : 'index.gsp', model: [employeeList: employeeService.list()]
+        [employeeCount: employeeService.count(), employeeList: employeeService.getEmployees(params)]
 //        render view : 'index.gsp', model: [employeeCount: employeeService.count(), employeeList: employeeService.list()]
 //        respond model:[employeeCount: "Employee.count()", employeeList: "Employee.list()"]
     }

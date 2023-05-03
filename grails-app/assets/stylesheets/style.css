@@ -3,34 +3,34 @@
     padding: 0;
 }
 .navbar-brand {
-    color: #db4800 !important;
+    color: #3d5a80 !important;
 }
 .nav-item .nav-link{
     color: #000000;
 }
 .nav-item .nav-link .active{
-    background-color:  #db4800 !important;
+    background-color:  #3d5a80 !important;
     color: #FFFFFF !important;
     font-weight: bold !important;
 }
 .nav-link:hover{
-    background-color:  #db4800;
+    background-color:  #3d5a80;
     color: #FFFFFF;
 }
 .nav-link:active{
-    background-color:  #db4800 !important;
+    background-color:  #3d5a80 !important;
     color: #FFFFFF;
 }
-.form-control{
-    border: none;
-    outline: none;
-}
+/*.form-control{*/
+/*    border: none;*/
+/*    outline: none;*/
+/*}*/
 .notes-title{
     font-weight: bold;
 }
-.form-control:focus{
-    box-shadow: inset 0 -1px 0 #ddd;
-}
+/*.form-control:focus{*/
+/*    box-shadow: inset 0 -1px 0 #ddd;*/
+/*}*/
 .card-link{
     font-weight: bold;
     font-size: 25px;
