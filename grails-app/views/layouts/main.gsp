@@ -15,7 +15,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand font-weight-bold " href="${createLink(uri: '/')}"> <h2 class="font-weight-bold">EMS</h2> </a>
+            <a class="navbar-brand font-weight-bold" href="${createLink(uri: '/')}"> <img src="${resource(dir: 'images', file: 'favicon.png')}" alt="EMS" width="40" height="40" class="d-inline-block align-text-top"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

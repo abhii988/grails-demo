@@ -6,51 +6,51 @@
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
-        <a href="#edit-department" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
-        <div id="edit-department" class="content scaffold-edit" role="main">
-            <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
+        <div id="edit-department" class="content container mt-2 scaffold-edit" role="main">
+            <br />
+            <h3><g:message code="default.edit.label" args="[entityName]" /></h3>
             <g:if test="${flash.message}">
-            <div class="message" role="status">${flash.message}</div>
+                <div class="alert alert-success alert-dismissible fade show pl-4" role="status">
+                    <i class="fa fa-check-circle-o"></i>
+                    ${flash.message}
+                </div>
             </g:if>
             <g:hasErrors bean="${this.department}">
-            <ul class="errors" role="alert">
-                <g:eachError bean="${this.department}" var="error">
-                <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                </g:eachError>
-            </ul>
+                <div class="alert bg-danger alert-danger alert-dismissible fade show pl-4" role="alert">
+                    <ul class="errors list-unstyled text-white pl-3" >
+                        <g:eachError bean="${this.department}" var="error">
+                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>
+                                <i class="fa fa-exclamation-circle" ></i>
+                                <g:message error="${error}"/></li>
+                        </g:eachError>
+                    </ul>
+                </div>
             </g:hasErrors>
             <g:form resource="${this.department}" method="PUT">
                 <g:hiddenField name="version" value="${this.department?.version}" />
-                <fieldset class="form">
-                    <table>
-                        <tr>
-                            <td width="20%">Id: </td>
-                            <td><g:textField name="id" value="${department.id}" readonly="true"/></td>
-                        </tr>
-                        <tr>
-                            <td>Department Name: </td>
-                            <td><g:textField name="name" value="${department.name}" autocomplete="off" required="true"/></td>
-                        </tr>
-                        <tr>
-                            <td>Unit: </td>
-                            <td><g:textField name="unit" value="${department.unit}" autocomplete="off" required="true"/></td>
-                        </tr>
-                        <tr>
-                            <td>Manager: </td>
-                            <td><g:textField name="manager" value="${department.manager}" autocomplete="off" required="true"/></td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <fieldset class="buttons">
-                    <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-                </fieldset>
+                <div class="container col-md-8 col-md-offset-2 mt-5">
+                    <div class="card" >
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Department ID</label>
+                                <g:textField name="id" type="number" value="${department.id}" class="notes-title form-control no-outline" placeholder="..." disabled="true"></g:textField><br />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Department Name</label>
+                                <g:textField name="name" type="text" value="${department.name}" class="notes-title form-control no-outline" placeholder="..." required="true"></g:textField><br />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Department Unit</label>
+                                <g:textField name="unit" type="text" value="${department.unit}" class="notes-title form-control no-outline" placeholder="..." required="true"></g:textField><br />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Department Manager</label>
+                                <g:textField name="manager" type="text" value="${department.manager}" class="notes-title form-control no-outline" placeholder="..." required="true"></g:textField><br />
+                            </div>
+                            <g:submitButton name="update" class="save mt-1 btn btn-primary float-right btn-large btn-rounded" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                        </div>
+                    </div>
+                </div>
             </g:form>
         </div>
     </body>
