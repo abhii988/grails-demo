@@ -15,17 +15,12 @@
                     ${flash.message}
                 </div>
             </g:if>
-            <g:hasErrors bean="${this.department}">
-                <div class="alert bg-danger alert-danger alert-dismissible fade show pl-4" role="alert">
-                    <ul class="errors list-unstyled text-white pl-3" >
-                        <g:eachError bean="${this.department}" var="error">
-                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>
-                                <i class="fa fa-exclamation-circle" ></i>
-                                <g:message error="${error}"/></li>
-                        </g:eachError>
-                    </ul>
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger alert-dismissible fade show pl-4" role="alert">
+                    <i class="fa fa-check-circle-o" ></i>
+                    ${flash.error}
                 </div>
-            </g:hasErrors>
+            </g:if>
             <g:form resource="${this.department}" method="PUT">
                 <g:hiddenField name="version" value="${this.department?.version}" />
                 <div class="container col-md-8 col-md-offset-2 mt-5">
@@ -47,7 +42,7 @@
                                 <label class="form-label">Department Manager</label>
                                 <g:textField name="manager" type="text" value="${department.manager}" class="notes-title form-control no-outline" placeholder="..." required="true"></g:textField><br />
                             </div>
-                            <g:submitButton name="update" class="save mt-1 btn btn-primary float-right btn-large btn-rounded" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                            <g:submitButton name="update" class="save mt-1 btn btn-success float-right btn-large btn-rounded" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                         </div>
                     </div>
                 </div>

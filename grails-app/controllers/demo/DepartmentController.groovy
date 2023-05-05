@@ -1,7 +1,8 @@
 package demo
 
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import pl.touk.excel.export.WebXlsxExporter
+import pl.touk.excel.export.XlsxExporter
 
 @Transactional(readOnly = false)
 class DepartmentController {
@@ -11,11 +12,7 @@ class DepartmentController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        render view : 'index.gsp', model: [departmentCount: departmentService.count(), departmentList: departmentService.list()]
-//        respond Department.list(params), model:[departmentCount: Department.count()]
-        if(params.id){
-            respond departmentService.getDepartment(params.id)
-        }
+        render view : 'index', model: [departmentCount: departmentService.getDepartmentCount(), departmentList: departmentService.getAllDepartments(params)]
     }
 
     def show(Department department) {
@@ -27,15 +24,25 @@ class DepartmentController {
     }
 
     @Transactional
-    def save(Department department) {
-        if (department.hasErrors()) {
-            respond department.errors, view:'create'
-            return
+    def save() {
+        try{
+            def result = departmentService.saveDepartment(params)
+            if (result != null){
+                if (result.errors){
+                    flash.error = result.errors.allErrors[0]
+                    redirect (controller:"department", action: "index")
+                }else {
+                    flash.message = message(code: 'default.created.message', args: [message(code: 'department.label', default: 'Department'), params.name])
+                    redirect(controller: "department", action: "index")
+                }
+            }else {
+                notFound()
+            }
+        }catch (Exception e) {
+            println(e.message)
+//            flash.error = "Could not add department ${params.name}"
+            redirect(action: "index")
         }
-//        department.save flush:true
-        departmentService.saveDepartment(department)
-        flash.message = message(code: 'default.created.message', args: [message(code: 'department.label', default: 'Department'), department.id])
-        redirect (controller:"department", action: "index")
     }
 
     def edit(Department department) {
@@ -43,33 +50,52 @@ class DepartmentController {
     }
 
     @Transactional
-    def update(Department department) {
-        if (department.hasErrors()) {
-            respond department.errors, view:'edit'
-            return
+    def update() {
+        try {
+            def result = departmentService.updateDepartment(params)
+            if (result != null){
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'department.label', default: 'Department'), params.name])
+                redirect(controller: "department", action: "index")
+            }else {
+                notFound()
+            }
+
+        }catch (Exception e){
+            flash.error = e.message
+            redirect (controller:"employee", action: "index")
         }
-        departmentService.saveDepartment(department)
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'department.label', default: 'Department'), department.id])
-        redirect (controller:"department", action: "index")
     }
 
     @Transactional
     def delete(Department department) {
-        if (department.hasErrors()) {
-            respond department.errors, view:'create'
-            return
+        try{
+            if (department == null) {
+                notFound()
+                return
+            }
+            department.delete flush:true
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'department.label', default: 'Department'), department.name])
+            redirect action:"index", method:"GET"
+        }catch (Exception e) {
+            println(e.message)
+            flash.error = "Cannot delete Department as it is referenced as a Foreign Key in Employee's Table"
+            redirect action:"index"
         }
-        if (department == null) {
-            notFound()
-            return
-        }
-        department.delete flush:true
-        flash.message = message(code: 'default.deleted.message', args: [message(code: 'department.label', default: 'Department'), department.id])
-        redirect action:"index", method:"GET"
-    }
 
+    }
+    def download() {
+        def departments = Department.findAll()
+        def headers = ['Name','Unit', 'Manager']
+        def withProperties = ['name', 'unit', 'manager']
+        new WebXlsxExporter().with {
+            setResponseHeaders(response)
+            fillHeader(headers)
+            add(departments, withProperties)
+            save(response.outputStream)
+        }
+    }
     protected void notFound() {
-        flash.message = message(code: 'default.not.found.message', args: [message(code: 'department.label', default: 'Department'), params.id])
+        flash.error = message(code: 'default.not.found.message', args: [message(code: 'department.label', default: 'Department'), params.name])
         redirect action: "index", method: "GET"
     }
 }

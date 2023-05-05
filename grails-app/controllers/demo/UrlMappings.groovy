@@ -11,7 +11,7 @@ class UrlMappings {
         "/employee/edit/$id"(controller: "employee", action: "update", method:"PUT")
 //        "/employee"(controller: "employee", action: "save", method:"POST")
 
-        "/"(view:"/index")
+        "/"(controller: "home", view: 'index', action: 'index')
         "500"(view:'/error')
         "404"(view:'/notFound')
     }

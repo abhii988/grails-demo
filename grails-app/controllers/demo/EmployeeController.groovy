@@ -1,42 +1,53 @@
 package demo
 
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import groovy.sql.Sql
+import pl.touk.excel.export.WebXlsxExporter
 
 @Transactional(readOnly = false)
 class EmployeeController {
     EmployeeService employeeService
     DepartmentService departmentService
+    def dataSource
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        [employeeCount: employeeService.count(), employeeList: employeeService.getEmployees(params)]
+    def index() {
+        try{
+            render(view: 'index', model: [employeeList: employeeService.getAllEmployees(params), employeeCount: employeeService.getEmployeeCount()])
+        }catch (Exception e){
+            flash.error = e.message
+            render(view: 'index')
+        }
 //        render view : 'index.gsp', model: [employeeCount: employeeService.count(), employeeList: employeeService.list()]
-//        respond model:[employeeCount: "Employee.count()", employeeList: "Employee.list()"]
     }
 
     def create(){
         Employee employee = new Employee(params)
-        [employee: employee, departmentList: departmentService.list()]
+        [employee: employee, departmentList: departmentService.getAllDepartments()]
     }
 
     @Transactional
     def save() {
-        def result = employeeService.saveEmployee(params)
-        if (result != null){
-            flash.message = message(code: 'default.created.message', args: [message(code: 'employee.label', default: 'Employee'), params.name])
-            redirect (controller:"employee", action: "index")
-        }else {
-            respond "error saving value"
-            redirect (controller:"employee", action: "index")
+        try{
+            def result = employeeService.saveEmployee(params)
+            if (result != null){
+                if (result.errors.allErrors){
+                    flash.error = "Unable to add Employee as '"+ result.errors.allErrors[0].field + "' cannot accept the value '" + result.errors.allErrors[0].rejectedValue + "'"
+                    redirect (controller:"employee", action: "index")
+                }else {
+                    flash.message = message(code: 'default.created.message', args: [message(code: 'employee.label', default: 'Employee'), params.name])
+                    redirect (controller:"employee", action: "index")
+                }
+            }else {
+                notFound()
+            }
+        }catch (Exception e) {
+            println(e.message)
+//            flash.error = "Could not add employee ${params.name}"
+            redirect(action: "index")
         }
-    }
 
-    def employeeList(){
-        def allEmployees = employeeService.list()
-        respond allEmployees
     }
 
     def show(Employee employee) {
@@ -44,55 +55,54 @@ class EmployeeController {
     }
 
     def edit(Employee employee) {
-//        Employee employee = Employee(params)
-//        respond employee
-        [employee: employee, departmentList: departmentService.list()]
+        [employee: employee, departmentList: departmentService.getAllDepartments()]
     }
 
     @Transactional
     def update() {
-        def result = employeeService.updateEmployee(params)
-        if (result != null){
-            flash.message = message(code: 'default.updated.message', args: [message(code: 'employee.label', default: 'Employee'), params.name])
+        try{
+            def result = employeeService.updateEmployee(params)
+            if (result != null){
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'employee.label', default: 'Employee'), params.name])
+                redirect (controller:"employee", action: "index")
+            }else {
+                notFound()
+            }
+        }catch (Exception e){
+            flash.error = e.message
             redirect (controller:"employee", action: "index")
-        }else {
-            respond "error saving value"
-            render view: "index.gsp"
         }
+
     }
     @Transactional
     def delete(Employee employee) {
-        if (employee == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'employee.label', default: 'Employee'), params.id])
-            return
+        try{
+            if (employee == null) {
+                notFound()
+            }
+            employee.delete flush:true
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'employee.label', default: 'Employee'), employee.name])
+            redirect action:"index", method:"GET"
+        }catch (Exception e){
+            flash.error = e.message
+            redirect (controller:"employee", action: "index")
         }
-        employee.delete flush:true
-        flash.message = message(code: 'default.deleted.message', args: [message(code: 'employee.label', default: 'Employee'), employee.id])
-        redirect action:"index", method:"GET"
-
+    }
+    def download() {
+        String query = "select e.id as id, e.name as name, e.age as age, e.position as position, e.department_id as department_id, d.name as department_name, d.unit as department_unit, d.manager as department_manager from employee e join department d on e.department_id = d.id;"
+        def sql = new Sql(dataSource);
+        def employees = sql.rows(query);
+        def headers = ['Name', 'Age', 'Position', 'Department Name', 'Department Unit', 'Department Manager']
+        def withProperties = ['name', 'age', 'position', 'department_name', 'department_unit', 'department_manager']
+        new WebXlsxExporter().with {
+            setResponseHeaders(response)
+            fillHeader(headers)
+            add(employees, withProperties)
+            save(response.outputStream)
+        }
     }
     protected void notFound() {
-        flash.message = message(code: 'default.not.found.message', args: [message(code: 'employee.label', default: 'Employee'), params.id])
+        flash.error = message(code: 'default.not.found.message', args: [message(code: 'employee.label', default: 'Employee'), params.id])
         redirect action: "index", method: "GET"
     }
-//    def save() {
-//        def result = employeeService.saveEmployee(params)
-//        if (result != null){
-//            flash.message = message(code: 'default.created.message', args: [message(code: 'employee.label', default: 'Employee'), result])
-//            redirect (controller:"employee", action: "index")
-//        }else {
-//            respond "error saving value"
-//            redirect (controller:"employee", action: "index")
-//        }
-//        if (employee.hasErrors()) {
-//            respond employee.errors, view:'create'
-//            return
-//        }
-//        def department = Department.findById(Integer.parseInt(params.department_id))
-//        employee.department =  department;
-//        def result = employee.save();
-//        println(result)
-//        employee.save flush:true
-//        flash.message = message(code: 'default.created.message', args: [message(code: 'employee.label', default: 'Employee'), employee.id])
-//    }
 }

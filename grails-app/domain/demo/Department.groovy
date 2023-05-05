@@ -11,6 +11,7 @@ class Department {
         name blank: false, unique: true
         unit blank: false, unique: true
         manager blank: false
+        employees cascade: 'save-update'
     }
     String toString() {
         name

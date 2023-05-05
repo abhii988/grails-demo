@@ -25,16 +25,16 @@
                         <a class="nav-link" href="${createLink(uri: '/')}" ><i class="fa-solid fa-house-chimney"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <g:link  class="nav-link"  controller="department" action="create"><i class="fa-solid fa-square-plus"></i> Create Department</g:link>
-                    </li>
-                    <li class="nav-item">
                         <g:link class="nav-link" controller="department" action="index"><i class="fa-solid fa-table-list"></i> List Department</g:link>
                     </li>
                     <li class="nav-item">
-                        <g:link class="nav-link" controller="employee" action="create"><i class="fa-solid fa-square-plus"></i> Create Employee</g:link>
+                        <g:link class="nav-link" controller="employee" action="index"><i class="fa-solid fa-table-list"></i> List Employee</g:link>
                     </li>
                     <li class="nav-item">
-                        <g:link class="nav-link" controller="employee" action="index"><i class="fa-solid fa-table-list"></i> List Employee</g:link>
+                        <g:link  class="nav-link"  controller="department" action="create"><i class="fa-solid fa-square-plus"></i> Create Department</g:link>
+                    </li>
+                    <li class="nav-item">
+                        <g:link class="nav-link" controller="employee" action="create"><i class="fa-solid fa-square-plus"></i> Create Employee</g:link>
                     </li>
                 </ul>
             </div>

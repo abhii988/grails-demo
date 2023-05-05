@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,34 +9,43 @@
     <body>
         <div id="list-employee" class="content container mt-2 scaffold-list" role="main">
             <br/>
-            <h3><g:message code="default.list.label" args="[entityName]" /></h3>
+            <div class="container text-center">
+                <div class="row align-items-center">
+                    <div class="col text-start">
+                        <h3><g:message code="default.list.label" args="[entityName]" /></h3>
+                    </div>
+                    <div class="col text-end">
+                        <g:form resource="${this.employee}" method="POST">
+                            Export Data: <g:link action="download"><i class="fa-regular fa-file-excel"></i></g:link>
+                        </g:form>
+                    </div>
+                </div>
+            </div>
             <g:if test="${flash.message}">
                 <div class="alert alert-success alert-dismissible fade show pl-4" role="alert">
                     <i class="fa fa-check-circle-o" ></i>
                     ${flash.message}
                 </div>
             </g:if>
-            <g:hasErrors bean="${this.employee}">
-                <div class="alert alert-danger bg-danger alert-dismissible fade show pl-4" role="alert">
-                    <ul class="errors list-unstyled text-white pl-3" >
-                        <g:eachError bean="${this.employee}" var="error">
-                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>
-                                <i class="fa fa-exclamation-circle" ></i>
-                                <g:message error="${error}"/></li>
-                        </g:eachError>
-                    </ul>
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger alert-dismissible fade show pl-4" role="alert">
+                    <i class="fa fa-check-circle-o" ></i>
+                    ${flash.error}
                 </div>
-            </g:hasErrors>
+            </g:if>
             <div class="container mt-5">
                 <div class="row">
                     <table class="table table-striped table-bordered table-hover">
                         <thead class="table-dark">
                             <tr>
                                 <th>S.No.</th>
-                                <th>Employee name</th>
-                                <th>Age</th>
-                                <th>Position</th>
-                                <th>Department Name</th>
+                                <g:sortableColumn property="name" title="Employee Name" />
+                                <g:sortableColumn property="age" title="Employee Age" />
+                                <g:sortableColumn property="position" title="Employee Position" />
+                                <g:sortableColumn property="department.name" title="Department Name" />
+%{--                                <th>Age</th>--}%
+%{--                                <th>Position</th>--}%
+%{--                                <th>Department Name</th>--}%
                                 <th>Action</th>
                             </tr>
                         </thead>

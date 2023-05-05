@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.validation.FieldError" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,17 +16,12 @@
                     ${flash.message}
                 </div>
             </g:if>
-            <g:hasErrors bean="${this.employee}">
-            <div class="alert bg-danger alert-danger alert-dismissible fade show pl-4" role="alert">
-                <ul class="errors list-unstyled text-white pl-3" >
-                    <g:eachError bean="${this.employee}" var="error">
-                        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>
-                            <i class="fa fa-exclamation-circle" ></i>
-                            <g:message error="${error}"/></li>
-                    </g:eachError>
-                </ul>
-            </div>
-            </g:hasErrors>
+            <g:if test="${flash.error}">
+                <div class="alert alert-danger alert-dismissible fade show pl-4" role="alert">
+                    <i class="fa fa-check-circle-o" ></i>
+                    ${flash.error}
+                </div>
+            </g:if>
             <g:form class="align-items-center" action="save">
                 <div class="container col-md-8 col-md-offset-2 mt-5">
                     <div class="card" >
@@ -46,8 +42,7 @@
                                 <label class="form-label">Department Name</label>
                                 <g:select value="department_id" name="department_id" from="${departmentList}" optionKey="id" optionValue="name" class="form-select" aria-label="Default select example"></g:select>
                             </div>
-
-                            <g:submitButton name="create" class="save mt-1 btn btn-primary float-right btn-large btn-rounded" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                            <g:submitButton name="create" class="save mt-1 btn btn-success float-right btn-large btn-rounded" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                         </div>
                     </div>
                 </div>
